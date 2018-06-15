@@ -58,13 +58,11 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
 public class GUI {
-	private static final int NUM_PUNTOS = 500;
+	private static final int NUM_PUNTOS = 5000;
 	private static final int NUM_CLUSTERS = 6;
 	private static final String EJE_X = "Tiempo";
 	private static final String EJE_Y = "Coste";
-	
-	private static final String GRAFICO = "Grafico";
-	
+
 	private JFrame frame;
 	private static Grafico chart;
 
@@ -73,7 +71,7 @@ public class GUI {
 	private Kmeans kmeans;
 	private JPanel panelGrafico;
 	private JLabel lbIteraciones;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -81,10 +79,10 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+
 					GUI window = new GUI(NUM_PUNTOS, NUM_CLUSTERS, EJE_X, EJE_Y);
 					window.frame.setVisible(true);
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -96,12 +94,12 @@ public class GUI {
 	 * Create the application.
 	 */
 	public GUI(int numPuntos, int numClusters, String ejeX, String ejeY) {
-		
+
 		this.numPuntos = numPuntos;
 		this.numClusters = numClusters;
 		this.ejeX = ejeX;
 		this.ejeY = ejeY;
-		
+
 		panelGrafico = null;
 		kmeans = new Kmeans(numPuntos, numClusters, ejeX, ejeY);
 		chart = new Grafico(kmeans);
@@ -114,22 +112,21 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 456, 352);
-		
+		frame.setBounds(100, 100, 600, 400);
+
 		frame.setTitle("Ejemplo K-Means");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		panel.setForeground(Color.YELLOW);
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
-		
+
 		lbIteraciones = new JLabel("Iteraciones: 0");
 		lbIteraciones.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panel.add(lbIteraciones);
-		
-		
+
 		JPanel jpControles = new JPanel();
 		jpControles.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		jpControles.setLayout(null);
@@ -139,36 +136,38 @@ public class GUI {
 		jpControles.setForeground(Color.RED);
 		frame.getContentPane().add(jpControles, BorderLayout.SOUTH);
 		jpControles.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		JLabel lblPuntos = new JLabel("Puntos");
 		jpControles.add(lblPuntos);
-		
+
 		JSpinner spPuntos = new JSpinner();
 		spPuntos.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				JSpinner s = (JSpinner) e.getSource();
-				numPuntos = (int)s.getValue();
+				numPuntos = (int) s.getValue();
+				if(numPuntos < 0) numPuntos = 0;
 			}
 		});
 		spPuntos.setMinimumSize(new Dimension(100, 20));
 		spPuntos.setValue(numPuntos);
 		jpControles.add(spPuntos);
-		
+
 		JLabel lblClusters = new JLabel("Clusters");
 		jpControles.add(lblClusters);
-		
+
 		JSpinner spCluster = new JSpinner();
 		spCluster.setSize(new Dimension(100, 40));
 		spCluster.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				JSpinner s = (JSpinner) e.getSource();
-				numClusters = (int)s.getValue();
+				numClusters = (int) s.getValue();
+				if(numClusters < 1) numClusters = 1;
 			}
 		});
 		spCluster.setValue(numClusters);
 		spCluster.setMinimumSize(new Dimension(40, 20));
 		jpControles.add(spCluster);
-		
+
 		JButton jbIterar = new JButton("Iterar");
 		jbIterar.setBounds(new Rectangle(0, 0, 80, 20));
 		jbIterar.addActionListener(new ActionListener() {
@@ -178,9 +177,9 @@ public class GUI {
 				pintarGrafico();
 
 			}
-		});		
+		});
 		jpControles.add(jbIterar);
-		
+
 		JButton btnResultado = new JButton("Resultado");
 		btnResultado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -190,7 +189,7 @@ public class GUI {
 			}
 		});
 		jpControles.add(btnResultado);
-		
+
 		JButton btnReiniciar = new JButton("Reiniciar");
 		btnReiniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -201,33 +200,27 @@ public class GUI {
 		});
 		jpControles.add(btnReiniciar);
 
-
 		pintarGrafico();
-		
+
 	}
 
 	private void pintarGrafico() {
-//			chart = new Grafico(kmeans);
-			
-			if(panelGrafico != null) {
-				frame.remove(panelGrafico);
-				panelGrafico.removeAll();
-				panelGrafico.revalidate();
-			}
-			
-			
-			panelGrafico =  chart.getPanel(); //.createPanel();
 
+		if (panelGrafico != null) {
+			frame.remove(panelGrafico);
+			panelGrafico.removeAll();
 			panelGrafico.revalidate();
-			frame.getContentPane().add(panelGrafico, BorderLayout.CENTER);
-			
-			lbIteraciones.setText("Iteraciones: " + kmeans.getIteraciones());
-			frame.repaint();
-			frame.revalidate();
-		
+		}
+
+		panelGrafico = chart.getPanel(); 
+
+		panelGrafico.revalidate();
+		frame.getContentPane().add(panelGrafico, BorderLayout.CENTER);
+
+		lbIteraciones.setText("Iteraciones: " + kmeans.getIteraciones());
+		frame.repaint();
+		frame.revalidate();
+
 	}
-
-
-
 
 }

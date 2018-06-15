@@ -103,6 +103,7 @@ public class Kmeans {
 		}
 
 		recalculaCentroide();
+		
 		iteraciones++;
 
 	}
@@ -137,8 +138,15 @@ public class Kmeans {
 		boolean desvio = false;
 
 		Iterator<Centroide> itC = centroides.iterator();
-		while (itC.hasNext()) {
+		while (itC.hasNext()) {			
 			Centroide centroide = itC.next();
+			
+			// Elimina los centroides que no tienen puntos
+//			if(centroide.getPuntos().size() == 0) {
+//				//itC.remove();
+//				break;
+//			}
+			
 			Punto p = new Punto(centroide.getPosicion().getX(), centroide.getPosicion().getY());
 			centroide.recalculaPosicion();
 

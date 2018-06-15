@@ -125,6 +125,7 @@ public class Grafico {
 
 		NumberAxis range = (NumberAxis) xyplot.getRangeAxis();
         range.setRange(Kmeans.MIN, Kmeans.MAX);
+        xyplot.getDomainAxis().setRange(0, 100);
         range.setTickUnit(new NumberTickUnit(0.1));
 		return jfreechart;
 	}
