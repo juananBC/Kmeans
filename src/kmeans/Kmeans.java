@@ -13,11 +13,27 @@ public class Kmeans {
 	private Set<Centroide> centroides;
 	private int iteraciones;
 	private boolean finalizado;
+	private boolean iniciado;
+	private String ejeX, ejeY; 
 	
-	public Kmeans(Set<Punto> puntos, int numCentroides) {
+	public Kmeans(Set<Punto> puntos, int numCentroides, String ejeX, String ejeY) {	
+		this.iniciado = false;
 		this.datos = puntos; //new HashSet<Punto>();
 		this.iteraciones = 0;
 		finalizado = false;
+		this.ejeX = ejeX;
+		this.ejeY = ejeY;
+		generarCentroides(numCentroides);
+	}
+	
+	
+	public Kmeans(int numPuntos, int numCentroides, String ejeX, String ejeY) {	
+		this.iniciado = false;
+		this.iteraciones = 0;
+		finalizado = false;
+		generaDatos(numPuntos);
+		this.ejeX = ejeX;
+		this.ejeY = ejeY;
 		generarCentroides(numCentroides);
 	}
 	
@@ -55,7 +71,6 @@ public class Kmeans {
 		while(itC.hasNext()){
 			Centroide centroide = itC.next();			
 			centroide.vaciar();
-			System.out.println("Centroide: " +centroide);
 		}
 		
 		Iterator<Punto> it = datos.iterator();
@@ -132,6 +147,14 @@ public class Kmeans {
 		return mensaje;
 	}
 
+	private void generaDatos(int numPuntos) {
+		this.datos = new HashSet<Punto>();
+
+		for(int i = 0; i< numPuntos; i++) {
+			datos.add(new Punto());
+		}
+	}
+	
 	public Set<Punto> getDatos() {
 		return datos;
 	}
@@ -162,6 +185,36 @@ public class Kmeans {
 
 	public void setFinalizado(boolean finalizado) {
 		this.finalizado = finalizado;
+	}
+
+
+	public boolean isIniciado() {
+		return iniciado;
+	}
+
+
+	public void setIniciado(boolean iniciado) {
+		this.iniciado = iniciado;
+	}
+
+
+	public String getEjeX() {
+		return ejeX;
+	}
+
+
+	public void setEjeX(String ejeX) {
+		this.ejeX = ejeX;
+	}
+
+
+	public String getEjeY() {
+		return ejeY;
+	}
+
+
+	public void setEjeY(String ejeY) {
+		this.ejeY = ejeY;
 	}
 	
 	

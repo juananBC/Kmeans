@@ -37,7 +37,7 @@ public class Centroide {
 			Punto p = it.next();
 			puntoMedio.sumar(p);
 		}
-		System.out.println("DIVIDE POR : " + puntos.size());
+
 		puntoMedio.dividir(puntos.size());
 		posicion = puntoMedio;
 		

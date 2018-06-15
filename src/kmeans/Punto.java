@@ -21,19 +21,15 @@ public class Punto {
 	}
 
 	public void sumar(Punto p) {
-		System.out.print(x + ", " + y + "    ");
 		x += p.x;
 		y += p.y;
-		System.out.println(x + ", " + y);
 	}
 	
 	public void dividir(int n) {
 		if(n == 0) return;
 		
-		System.out.print(x + ", " + y + "    ");
 		x = x / n;
 		y = y / n;
-		System.out.println(x + ", " + y);
 
 	}
 	
