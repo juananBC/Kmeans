@@ -1,5 +1,6 @@
 package interfaz;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,9 +30,16 @@ public class Grafico {
 	private static final float TAM_PUNTO_CLUSTER = (float) 6;
 	
 	private Kmeans kmeans;
+	private JPanel panel;
 	
 	public Grafico(Kmeans kmeans) {
 		this.kmeans = kmeans;
+		this.panel = createPanel();
+	}
+	
+	public Grafico() {
+		this.kmeans = null;
+		this.panel = createPanel();
 	}
 	
 	
@@ -47,6 +55,8 @@ public class Grafico {
 	
 	
 	private void pintarClusters(DefaultXYZDataset defaultxyzdataset) {
+		if(kmeans == null) return;
+		
 		List<Float> X = new ArrayList<Float>();
 		List<Float> Y = new ArrayList<Float>();
 		List<Float> size = new ArrayList<Float>();
@@ -59,9 +69,6 @@ public class Grafico {
 			size.clear();
 			
 			Centroide centroide = itC.next();
-			X.add(centroide.getPosicion().getX());
-			Y.add(centroide.getPosicion().getY());
-			size.add(TAM_PUNTO_CLUSTER);
 
 			Set<Punto> puntos = centroide.getPuntos();
 			Iterator<Punto> itP = puntos.iterator();
@@ -71,14 +78,19 @@ public class Grafico {
 				Y.add(punto.getY());
 				size.add(TAM_PUNTO_VALOR);				
 			}
+
+			X.add(centroide.getPosicion().getX());
+			Y.add(centroide.getPosicion().getY());
+			size.add(TAM_PUNTO_CLUSTER);
 			
-	
 			double[][] valores = new double[][] {toArray(X), toArray(Y), toArray(size)};
 			defaultxyzdataset.addSeries(centroide.getNombre(), valores );
 		}
 	}
 	
 	private void pintarPuntosSinAgrupar(DefaultXYZDataset defaultxyzdataset) {
+		if(kmeans == null) return;
+		
 		List<Float> X = new ArrayList<Float>();
 		List<Float> Y = new ArrayList<Float>();
 		List<Float> size = new ArrayList<Float>();
@@ -101,15 +113,18 @@ public class Grafico {
 	}
 	
 	private JFreeChart crearGrafico() {
+		String ejeX = (kmeans != null)?  kmeans.getEjeX(): "";
+		String ejeY = (kmeans != null)?  kmeans.getEjeY(): "";
+		
 		XYZDataset xyzdataset = datosPintar();
-		JFreeChart jfreechart = ChartFactory.createBubbleChart("K-means", kmeans.getEjeX(), kmeans.getEjeY(),
+		JFreeChart jfreechart = ChartFactory.createBubbleChart("K-means",ejeX, ejeY,
 				xyzdataset,	PlotOrientation.VERTICAL, true, true, false);
 
 		XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-		xyplot.setForegroundAlpha(0.65F);
+		xyplot.setForegroundAlpha(0.95F);
 
 		NumberAxis range = (NumberAxis) xyplot.getRangeAxis();
-        range.setRange(Kmeans.MIN, Kmeans.MAX+ Kmeans.MAX*0.1);
+        range.setRange(Kmeans.MIN, Kmeans.MAX);
         range.setTickUnit(new NumberTickUnit(0.1));
 		return jfreechart;
 	}
@@ -133,5 +148,19 @@ public class Grafico {
 		}
 		return resultado;
 	}
+
+
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+	
+	
 	
 }

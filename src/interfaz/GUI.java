@@ -82,8 +82,6 @@ public class GUI {
 			public void run() {
 				try {
 					
-					chart = null;
-					
 					GUI window = new GUI(NUM_PUNTOS, NUM_CLUSTERS, EJE_X, EJE_Y);
 					window.frame.setVisible(true);
 					
@@ -106,6 +104,7 @@ public class GUI {
 		
 		panelGrafico = null;
 		kmeans = new Kmeans(numPuntos, numClusters, ejeX, ejeY);
+		chart = new Grafico(kmeans);
 
 		initialize();
 	}
@@ -122,11 +121,11 @@ public class GUI {
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.YELLOW);
+		panel.setBackground(Color.WHITE);
 		panel.setForeground(Color.YELLOW);
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 		
-		lbIteraciones = new JLabel("Iteraciones:");
+		lbIteraciones = new JLabel("Iteraciones: 0");
 		lbIteraciones.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panel.add(lbIteraciones);
 		
@@ -136,7 +135,7 @@ public class GUI {
 		jpControles.setLayout(null);
 		jpControles.setMinimumSize(new Dimension(100, 100));
 		jpControles.setBounds(new Rectangle(0, 0, 50, 100));
-		jpControles.setBackground(Color.RED);
+		jpControles.setBackground(Color.WHITE);
 		jpControles.setForeground(Color.RED);
 		frame.getContentPane().add(jpControles, BorderLayout.SOUTH);
 		jpControles.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -175,17 +174,18 @@ public class GUI {
 		jbIterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				kmeans.iterar();
+				chart = new Grafico(kmeans);
 				pintarGrafico();
 
 			}
-		});
-		
+		});		
 		jpControles.add(jbIterar);
 		
 		JButton btnResultado = new JButton("Resultado");
 		btnResultado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				kmeans.init();
+				chart = new Grafico(kmeans);
 				pintarGrafico();
 			}
 		});
@@ -195,6 +195,7 @@ public class GUI {
 		btnReiniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				kmeans = new Kmeans(numPuntos, numClusters, ejeX, ejeY);
+				chart = new Grafico(kmeans);
 				pintarGrafico();
 			}
 		});
@@ -206,7 +207,7 @@ public class GUI {
 	}
 
 	private void pintarGrafico() {
-			chart = new Grafico(kmeans);
+//			chart = new Grafico(kmeans);
 			
 			if(panelGrafico != null) {
 				frame.remove(panelGrafico);
@@ -215,7 +216,7 @@ public class GUI {
 			}
 			
 			
-			panelGrafico = chart.createPanel();
+			panelGrafico =  chart.getPanel(); //.createPanel();
 
 			panelGrafico.revalidate();
 			frame.getContentPane().add(panelGrafico, BorderLayout.CENTER);
