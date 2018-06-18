@@ -20,7 +20,7 @@ public class Kmeans {
 		this.iniciado = false;
 		this.datos = puntos; // new HashSet<Punto>();
 		this.iteraciones = 0;
-		finalizado = false;
+		this.finalizado = false;
 		this.ejeX = ejeX;
 		this.ejeY = ejeY;
 		generarCentroides(numCentroides);
@@ -29,10 +29,11 @@ public class Kmeans {
 	public Kmeans(int numPuntos, int numCentroides, String ejeX, String ejeY) {
 		this.iniciado = false;
 		this.iteraciones = 0;
-		finalizado = false;
-		generaDatos(numPuntos);
+		this.finalizado = false;
 		this.ejeX = ejeX;
 		this.ejeY = ejeY;
+		
+		generaDatos(numPuntos);
 		generarCentroides(numCentroides);
 	}
 

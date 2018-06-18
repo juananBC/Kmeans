@@ -30,6 +30,8 @@ public class Centroide {
 	}
 	
 	public void recalculaPosicion() {
+		if(puntos.isEmpty()) return;
+			
 		Punto puntoMedio = new Punto(0,0); 
 		
 		Iterator<Punto> it = puntos.iterator();
@@ -39,6 +41,7 @@ public class Centroide {
 		}
 
 		puntoMedio.dividir(puntos.size());
+		
 		posicion = puntoMedio;
 		
 	}
