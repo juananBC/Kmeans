@@ -12,7 +12,7 @@ public class Centroide {
 	
 	public Centroide(String nombre) {
 		this.nombre= nombre;
-		this.puntos = new HashSet<Punto>();
+		this.puntos = new HashSet<>();
 		this.posicion = new Punto();
 	}
 	

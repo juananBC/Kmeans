@@ -14,24 +14,29 @@ public class Kmeans {
 	private int iteraciones;
 	private boolean finalizado;
 	private boolean iniciado;
-	private String ejeX, ejeY;
+	private String ejeX;
+	private String ejeY;
+	private boolean eliminarCentroidesVacios;
 
-	public Kmeans(Set<Punto> puntos, int numCentroides, String ejeX, String ejeY) {
+	public Kmeans(Set<Punto> puntos, int numCentroides, String ejeX, String ejeY, boolean eliminarCentroidesVacios) {
 		this.iniciado = false;
-		this.datos = puntos; // new HashSet<Punto>();
+		this.datos = puntos; 
 		this.iteraciones = 0;
 		this.finalizado = false;
 		this.ejeX = ejeX;
 		this.ejeY = ejeY;
+		this.eliminarCentroidesVacios = eliminarCentroidesVacios;
+		
 		generarCentroides(numCentroides);
 	}
 
-	public Kmeans(int numPuntos, int numCentroides, String ejeX, String ejeY) {
+	public Kmeans(int numPuntos, int numCentroides, String ejeX, String ejeY, boolean eliminarCentroidesVacios) {
 		this.iniciado = false;
 		this.iteraciones = 0;
 		this.finalizado = false;
 		this.ejeX = ejeX;
 		this.ejeY = ejeY;
+		this.eliminarCentroidesVacios = eliminarCentroidesVacios;
 		
 		generaDatos(numPuntos);
 		generarCentroides(numCentroides);
@@ -61,7 +66,7 @@ public class Kmeans {
 	 * Genera aleatoriamente los centroides de las agrupaciones/clusters
 	 */
 	private void generarCentroides(int numCentroides) {
-		centroides = new HashSet<Centroide>();
+		centroides = new HashSet<>();
 
 		for (int i = 0; i < numCentroides; i++) {
 			Centroide centroide = new Centroide("Clase_" + i);
@@ -74,7 +79,7 @@ public class Kmeans {
 	 * @param numPuntos
 	 */
 	private void generaDatos(int numPuntos) {
-		this.datos = new HashSet<Punto>();
+		this.datos = new HashSet<>();
 
 		for (int i = 0; i < numPuntos; i++) {
 			datos.add(new Punto());
@@ -99,8 +104,10 @@ public class Kmeans {
 		while (it.hasNext()) {
 			Punto punto = it.next();
 			Centroide centroide = centroideCercano(punto);
-			centroide.addPunto(punto);
-			punto.setClase(centroide.getNombre());
+			if(centroide != null) {
+				centroide.addPunto(punto);
+				punto.setClase(centroide.getNombre());
+			}
 		}
 
 		recalculaCentroide();
@@ -143,10 +150,10 @@ public class Kmeans {
 			Centroide centroide = itC.next();
 			
 			// Elimina los centroides que no tienen puntos
-//			if(centroide.getPuntos().size() == 0) {
-//				//itC.remove();
-//				break;
-//			}
+			if(eliminarCentroidesVacios && centroide.getPuntos().isEmpty() ) {
+				itC.remove();
+				break;
+			}
 			
 			Punto p = new Punto(centroide.getPosicion().getX(), centroide.getPosicion().getY());
 			centroide.recalculaPosicion();

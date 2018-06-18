@@ -1,8 +1,6 @@
 package interfaz;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -57,15 +55,15 @@ public class Grafico {
 	private void pintarClusters(DefaultXYZDataset defaultxyzdataset) {
 		if(kmeans == null) return;
 		
-		List<Float> X = new ArrayList<Float>();
-		List<Float> Y = new ArrayList<Float>();
-		List<Float> size = new ArrayList<Float>();
+		List<Float> coordX = new ArrayList<>();
+		List<Float> coordY = new ArrayList<>();
+		List<Float> size = new ArrayList<>();
 		
 		Set<Centroide> centroides = kmeans.getCentroides();
 		Iterator<Centroide> itC = centroides.iterator();
 		while (itC.hasNext()) {
-			X.clear();
-			Y.clear();
+			coordX.clear();
+			coordY.clear();
 			size.clear();
 			
 			Centroide centroide = itC.next();
@@ -74,16 +72,16 @@ public class Grafico {
 			Iterator<Punto> itP = puntos.iterator();
 			while (itP.hasNext()) {
 				Punto punto = itP.next();
-				X.add(punto.getX());
-				Y.add(punto.getY());
+				coordX.add(punto.getX());
+				coordY.add(punto.getY());
 				size.add(TAM_PUNTO_VALOR);				
 			}
 
-			X.add(centroide.getPosicion().getX());
-			Y.add(centroide.getPosicion().getY());
+			coordX.add(centroide.getPosicion().getX());
+			coordY.add(centroide.getPosicion().getY());
 			size.add(TAM_PUNTO_CLUSTER);
 			
-			double[][] valores = new double[][] {toArray(X), toArray(Y), toArray(size)};
+			double[][] valores = new double[][] {toArray(coordX), toArray(coordY), toArray(size)};
 			defaultxyzdataset.addSeries(centroide.getNombre(), valores );
 		}
 	}
@@ -91,9 +89,9 @@ public class Grafico {
 	private void pintarPuntosSinAgrupar(DefaultXYZDataset defaultxyzdataset) {
 		if(kmeans == null) return;
 		
-		List<Float> X = new ArrayList<Float>();
-		List<Float> Y = new ArrayList<Float>();
-		List<Float> size = new ArrayList<Float>();
+		List<Float> coordX = new ArrayList<>();
+		List<Float> coordY = new ArrayList<>();
+		List<Float> size = new ArrayList<>();
 		
 		// Pintar los puntos sin agrupar
 		if(!kmeans.isIniciado()) {		
@@ -102,12 +100,12 @@ public class Grafico {
 			Iterator<Punto> itP = puntos.iterator();
 			while (itP.hasNext()) {
 				Punto punto = itP.next();
-				X.add(punto.getX());
-				Y.add(punto.getY());
+				coordX.add(punto.getX());
+				coordY.add(punto.getY());
 				size.add(TAM_PUNTO_VALOR);				
 			}
 			
-			double[][] valores = new double[][] {toArray(X), toArray(Y), toArray(size)};
+			double[][] valores = new double[][] {toArray(coordX), toArray(coordY), toArray(size)};
 			defaultxyzdataset.addSeries("Sin agrupar", valores );
 		}
 	}

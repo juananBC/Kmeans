@@ -4,7 +4,8 @@ public class Punto {
 
 
 	private String clase;
-	private float x, y;
+	private float x;
+	private float y;
 	
 	public Punto() {
 		x = (float) (Math.random() * Kmeans.MAX - Kmeans.MIN);
